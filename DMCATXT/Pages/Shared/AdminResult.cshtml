@@ -1,0 +1,106 @@
+﻿@model IEnumerable<DMCATXT.Models.UploadInfo>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin UploadInfo Results</title>
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Stil kodları */
+        .approval-checkbox {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            background-color: gray;
+        }
+
+        .approved {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin UploadInfo Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Customer Name</th>
+                <th>Created Date</th>
+                <th>File Path</th>
+                <th>Download</th>
+                <th>Approval</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var result in Model)
+            {
+                <tr>
+                    <td>@result.ID</td>
+                    <td>@result.Name</td>
+                    <td>@result.Surname</td>
+                    <td>@result.CustomerName</td>
+                    <td>@result.CreatedDate</td>
+                    <td>@result.FilePath</td>
+                    <td>
+                        <a href="/Page/DownloadFile?fileName=@result.FilePath" download>Download File</a>
+                    </td>
+                    <td>
+                        <input type="checkbox"
+                               class="approval-checkbox @(result.Approval == "Approved" ? "approved" : "")"
+                               data-id="@result.ID"
+                               onclick="toggleApproval(this)">
+                    </td>
+                  
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script>
+        function toggleApproval(checkbox) {
+            console.log("toggleApproval function is called.");
+            if (checkbox.classList.contains("approved")) {
+                checkbox.classList.remove("approved");
+                updateApprovalStatus(checkbox.getAttribute("data-id"), false);
+            } else {
+                checkbox.classList.add("approved");
+                updateApprovalStatus(checkbox.getAttribute("data-id"), true);
+            }
+        }
+
+        async function updateApprovalStatus(id, approved) {
+            try {
+                console.log("updateApprovalStatus function is called.");
+                const response = await fetch(`/Admin/UpdateApproval?id=${id}&approved=${approved}`, {
+                    method: 'POST'
+                });
+
+                if (response.ok) {
+                    console.log("Approval status updated successfully.");
+                } else {
+                    console.error("Failed to update approval status.");
+                }
+            } catch (error) {
+                console.error("An error occurred:", error);
+            }
+        }
+
+    </script>
+</body>
+</html>

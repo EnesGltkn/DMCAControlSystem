@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>UploadInfo Results</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>UploadInfo Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Customer Name</th>
+                <th>Created Date</th>
+                <th>File Path</th>
+                <th>Download</th> <!-- Yeni sütun eklendi -->
+                <th>Approval</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var result in Model)
+            {
+                <tr>
+                    <td>@result.ID</td>
+                    <td>@result.Name</td>
+                    <td>@result.Surname</td>
+                    <td>@result.CustomerName</td>
+                    <td>@result.CreatedDate</td>
+                    <td>@result.FilePath</td>
+                    <td>
+                        <!-- Dosya indirme bağlantısı (Download Link) -->
+                        <a href="/Page/DownloadFile?fileName=@result.FilePath" download>Download File</a>
+
+                    </td>
+                    <td>
+                            <input type="checkbox" class="account-checkbox">
+                            
+                    </td>
+
+                </tr>
+                
+            }
+
+        </tbody>
+    </table>
+    <button id="saveButton" onclick="saveButtonClick()">Save</button>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function saveButtonClick() {
+            var selectedIds = [];
+            // Loop through all approval checkboxes in the table
+            $('.account-checkbox').each(function () {
+                if ($(this).is(':checked')) {
+                    var id = $(this).closest('tr').find('td:first').text();
+                    selectedIds.push(id);
+                }
+            });
+
+            // Make an AJAX call to Admin/UpdateApproval with the list of selected IDs
+            $.ajax({
+                type: "POST",
+                url: "/Admin/UpdateApproval",
+                data: encodeURIComponent(JSON.stringify(selectedIds)),
+
+                contentType: "application/json",
+                traditional: true,
+                success: function (data) {
+                    console.log("Approval updated for IDs: " + selectedIds.join(", "));
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error updating approval for IDs: " + selectedIds.join(", "));
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

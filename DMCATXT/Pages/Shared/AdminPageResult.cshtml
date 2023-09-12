@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>UploadInfo Query</title>
+</head>
+<body>
+    <h1>UploadInfo Query</h1>
+    <form method="GET" action="/Admin/Get">
+        <label for="dateFrom">Date From:</label>
+        <input type="date" id="dateFrom" name="dateFrom" required>
+        <br>
+        <label for="dateTo">Date To:</label>
+        <input type="date" id="dateTo" name="dateTo" required>
+        <br>
+        <div class="form-group">
+            <label for="customer-names">Please Select a Customer:</label>
+            <select name="customer" id="customer-names" class="form-control">
+                <option value="Alliance Yapım Ltd.şti">Alliance Yapım Ltd.şti.</option>
+                <option value="Disney Enterprises, Inc.">Disney Enterprises, Inc.</option>
+                <option value="Fox Networks Group Yapım Ltd.şti.">Fox Networks Group Yapım Ltd.şti.</option>
+                <option value="Gai̇n Medya A.ş">Gai̇n Medya A.ş.</option>
+            </select>
+        </div>
+
+        <br>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+        <br>
+        <label for="surName">Surname:</label>
+        <input type="text" id="surName" name="surName">
+        <br>
+        <input type="submit" value="Query">
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            // Convert date inputs to ISO 8601 format before sending
+            formData.set('dateFrom', new Date(formData.get('dateFrom')).toISOString());
+            formData.set('dateTo', new Date(formData.get('dateTo')).toISOString());
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', form.action + '?' + new URLSearchParams(formData).toString());
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        });
+    </script>
+</body>
+</html>

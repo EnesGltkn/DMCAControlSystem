@@ -1,0 +1,41 @@
+﻿@model DMCATXT.Models.UploadInfo
+<div id="cash_back" class="box box-primary">
+    <form method="post" asp-action="Save" asp-controller="Dmca" enctype="multipart/form-data">
+        <div>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <label for="customer-names">Lütfen Bir Müşteri Seçiniz:</label>
+                    <select name="CustomerName" id="customer-names" class="form-control">
+                        <option value="Alliance Yapım Ltd.şti">Alliance Yapım Ltd.şti.</option>
+                        <option value="Disney Enterprises, Inc.">Disney Enterprises, Inc.</option>
+                        <option value="Fox Networks Group Yapım Ltd.şti.">Fox Networks Group Yapım Ltd.şti.</option>
+                        <option value="Gai̇n Medya A.ş">Gai̇n Medya A.ş.</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="form-group">
+                    <label asp-for="Surname" class="control-label"></label>
+                    <input asp-for="Surname" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="File" class="control-label"></label>
+            <input type="file" asp-for="File" class="form-control" />
+        </div>
+        </div>
+        <div class="row">
+            <button type="submit">Kaydet</button>
+        </div>
+    </form>
+</div>

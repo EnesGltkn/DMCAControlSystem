@@ -1,0 +1,74 @@
+﻿@model IEnumerable<DMCATXT.Models.UploadInfo>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin UploadInfo Results</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Stil kodları */
+        .approval-checkbox {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            background-color: green; /* Yeşil renk */
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin UploadInfo Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Customer Name</th>
+                <th>Created Date</th>
+                <th>File Path</th>
+                <th>Download</th>
+                <th>Approval</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var result in Model)
+            {
+                <tr>
+                    <td>@result.ID</td>
+                    <td>@result.Name</td>
+                    <td>@result.Surname</td>
+                    <td>@result.CustomerName</td>
+                    <td>@result.CreatedDate</td>
+                    <td>@result.FilePath</td>
+                    <td>
+                        <!-- Dosya indirme bağlantısı (Download Link) -->
+                        <a href="/Page/DownloadFile?fileName=@result.FilePath" download>Download File</a>
+                    </td>
+                    <td>
+                        <!-- Approval sütunu, checkbox stilini değiştirdik -->
+                        @if (result.Approval == "Approved")
+                        {
+                            <div class="approval-checkbox"></div>
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="approvalCheckbox" id="approvalCheckbox" disabled />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
